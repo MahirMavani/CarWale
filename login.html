@@ -1,0 +1,597 @@
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login / Register – CarWale</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --red: #e63535;
+      --red-dark: #c42a2a;
+      --navy: #0f1923;
+      --navy-mid: #1d2d3d;
+      --gray-100: #f0f2f5;
+      --gray-200: #e2e6ec;
+      --gray-400: #9aa5b4;
+      --gray-600: #5a6675;
+      --white: #ffffff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      background: var(--navy);
+      overflow: hidden;
+    }
+
+    /* ── LEFT PANEL ── */
+    .left-panel {
+      flex: 1;
+      background: linear-gradient(145deg, #0f1923 0%, #1a3050 50%, #0d2035 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .left-panel::before {
+      content: '';
+      position: absolute;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(230,53,53,0.15) 0%, transparent 70%);
+      top: -100px; right: -100px;
+      border-radius: 50%;
+      animation: pulse 4s ease-in-out infinite alternate;
+    }
+    .left-panel::after {
+      content: '';
+      position: absolute;
+      width: 350px; height: 350px;
+      background: radial-gradient(circle, rgba(59,130,246,0.1) 0%, transparent 70%);
+      bottom: -80px; left: -80px;
+      border-radius: 50%;
+      animation: pulse 5s ease-in-out infinite alternate-reverse;
+    }
+    @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.15); } }
+
+    .brand-area { position: relative; z-index: 1; text-align: center; margin-bottom: 3rem; }
+    .brand-logo {
+      font-family: 'Sora', sans-serif;
+      font-size: 2.5rem; font-weight: 800;
+      color: white; text-decoration: none;
+      display: flex; align-items: center; gap: .6rem;
+      justify-content: center; margin-bottom: 1rem;
+    }
+    .brand-logo span { color: var(--red); }
+    .brand-tagline { color: rgba(255,255,255,0.6); font-size: 1rem; }
+
+    .features-list { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 1.2rem; }
+    .feature-item {
+      display: flex; align-items: center; gap: 1rem;
+      color: rgba(255,255,255,0.8);
+    }
+    .feature-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: rgba(255,255,255,0.08);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; flex-shrink: 0;
+    }
+    .feature-text strong { display: block; color: white; font-weight: 600; font-size: .95rem; }
+    .feature-text span { font-size: .82rem; color: rgba(255,255,255,0.5); }
+
+    /* ── RIGHT PANEL ── */
+    .right-panel {
+      width: 480px;
+      background: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 3rem 3rem;
+      overflow-y: auto;
+    }
+
+    /* ── TABS ── */
+    .auth-tabs {
+      display: flex; gap: 0; margin-bottom: 2rem;
+      background: var(--gray-100); border-radius: 12px; padding: 5px;
+    }
+    .auth-tab {
+      flex: 1; padding: .65rem;
+      background: none; border: none; cursor: pointer;
+      font-family: 'Sora', sans-serif; font-size: .88rem; font-weight: 700;
+      color: var(--gray-600); border-radius: 9px;
+      transition: all .22s;
+    }
+    .auth-tab.active {
+      background: white; color: var(--navy);
+      box-shadow: 0 2px 8px rgba(0,0,0,.1);
+    }
+
+    /* ── FORM ── */
+    .auth-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.7rem; font-weight: 800;
+      color: var(--navy); margin-bottom: .4rem;
+    }
+    .auth-subtitle { color: var(--gray-400); font-size: .9rem; margin-bottom: 1.8rem; }
+
+    .form-group { margin-bottom: 1.1rem; }
+    .form-group label {
+      display: block; font-size: .82rem; font-weight: 700;
+      color: var(--navy); margin-bottom: .45rem;
+    }
+    .input-wrapper { position: relative; }
+    .input-icon {
+      position: absolute; left: .9rem; top: 50%; transform: translateY(-50%);
+      color: var(--gray-400); font-size: 1rem; pointer-events: none;
+    }
+    .form-input {
+      width: 100%; padding: .75rem .9rem .75rem 2.5rem;
+      border: 2px solid var(--gray-200); border-radius: 10px;
+      font-family: 'DM Sans', sans-serif; font-size: .92rem;
+      color: var(--navy); outline: none; transition: all .22s;
+      background: white;
+    }
+    .form-input:focus { border-color: var(--red); box-shadow: 0 0 0 3px rgba(230,53,53,.08); }
+    .form-input.error { border-color: #ef4444; }
+
+    .eye-btn {
+      position: absolute; right: .9rem; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer;
+      color: var(--gray-400); font-size: 1rem;
+    }
+
+    .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+
+    .field-error { color: #ef4444; font-size: .75rem; margin-top: .3rem; }
+
+    /* ── PASSWORD STRENGTH ── */
+    .pwd-strength { margin-top: .5rem; }
+    .strength-bar { height: 4px; border-radius: 2px; background: var(--gray-200); margin-bottom: .3rem; }
+    .strength-fill { height: 100%; border-radius: 2px; transition: all .3s; width: 0; }
+    .strength-label { font-size: .72rem; font-weight: 600; }
+
+    /* ── SUBMIT BUTTON ── */
+    .btn-auth {
+      width: 100%; padding: .85rem;
+      background: var(--red); color: white; border: none;
+      border-radius: 10px; cursor: pointer;
+      font-family: 'Sora', sans-serif; font-size: 1rem; font-weight: 800;
+      margin-top: .5rem; transition: all .22s;
+      position: relative; overflow: hidden;
+    }
+    .btn-auth:hover:not(:disabled) { background: var(--red-dark); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(230,53,53,.4); }
+    .btn-auth:disabled { opacity: .7; cursor: not-allowed; transform: none; }
+    .btn-auth .spinner {
+      display: inline-block; width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,.4); border-top-color: white;
+      border-radius: 50%; animation: spin .7s linear infinite;
+      vertical-align: middle; margin-right: .4rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── DIVIDER ── */
+    .divider {
+      display: flex; align-items: center; gap: .75rem;
+      margin: 1.2rem 0; color: var(--gray-400); font-size: .82rem;
+    }
+    .divider::before, .divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--gray-200);
+    }
+
+    /* ── SOCIAL BUTTONS ── */
+    .social-btns { display: flex; gap: .75rem; }
+    .btn-social {
+      flex: 1; display: flex; align-items: center; justify-content: center; gap: .5rem;
+      padding: .65rem; border: 2px solid var(--gray-200); border-radius: 10px;
+      background: none; cursor: pointer; font-family: 'DM Sans', sans-serif;
+      font-size: .85rem; font-weight: 600; color: var(--navy); transition: all .22s;
+    }
+    .btn-social:hover { border-color: var(--red); color: var(--red); background: #fff0f0; }
+
+    /* ── ALERT ── */
+    .alert {
+      padding: .9rem 1rem; border-radius: 10px;
+      font-size: .88rem; font-weight: 600; margin-bottom: 1rem;
+      display: none; align-items: center; gap: .6rem;
+    }
+    .alert.show { display: flex; }
+    .alert.success { background: #d1fae5; color: #065f46; border: 1.5px solid #6ee7b7; }
+    .alert.error   { background: #fee2e2; color: #991b1b; border: 1.5px solid #fca5a5; }
+
+    /* ── FOOTER LINK ── */
+    .switch-link { text-align: center; margin-top: 1.5rem; font-size: .88rem; color: var(--gray-400); }
+    .switch-link a { color: var(--red); font-weight: 700; text-decoration: none; }
+    .switch-link a:hover { text-decoration: underline; }
+
+    /* ── BACK LINK ── */
+    .back-home {
+      position: absolute; top: 1.5rem; right: 2rem;
+      color: var(--gray-400); text-decoration: none;
+      font-size: .85rem; font-weight: 600;
+      display: flex; align-items: center; gap: .3rem;
+      transition: color .2s;
+    }
+    .back-home:hover { color: var(--red); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      body { flex-direction: column; overflow: auto; }
+      .left-panel { display: none; }
+      .right-panel { width: 100%; padding: 2rem 1.5rem; min-height: 100vh; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LEFT PANEL -->
+<div class="left-panel">
+  <div class="brand-area">
+    <a href="/" class="brand-logo">🚗 Car<span>Wale</span></a>
+    <p class="brand-tagline">India's most trusted car marketplace</p>
+  </div>
+  <div class="features-list">
+    <div class="feature-item">
+      <div class="feature-icon">🔍</div>
+      <div class="feature-text">
+        <strong>50,000+ Cars Listed</strong>
+        <span>New & used cars across 100+ cities</span>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">💰</div>
+      <div class="feature-text">
+        <strong>Best Price Guarantee</strong>
+        <span>Compare prices and get dealer offers</span>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">✅</div>
+      <div class="feature-text">
+        <strong>Certified Used Cars</strong>
+        <span>Thoroughly inspected, 100% genuine</span>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">📋</div>
+      <div class="feature-text">
+        <strong>Sell Your Car Instantly</strong>
+        <span>Get the best valuation in minutes</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RIGHT PANEL -->
+<div class="right-panel" style="position:relative;">
+
+  <a href="/index.html" class="back-home">← Back to Home</a>
+
+  <!-- TABS -->
+  <div class="auth-tabs">
+    <button class="auth-tab active" id="loginTab" onclick="switchTab('login')">Login</button>
+    <button class="auth-tab" id="registerTab" onclick="switchTab('register')">Register</button>
+  </div>
+
+  <!-- ALERT -->
+  <div class="alert" id="alertBox">
+    <span id="alertIcon"></span>
+    <span id="alertMsg"></span>
+  </div>
+
+  <!-- ── LOGIN FORM ── -->
+  <div id="loginForm">
+    <h2 class="auth-title">Welcome back 👋</h2>
+    <p class="auth-subtitle">Login to your CarWale account</p>
+
+    <div class="form-group">
+      <label>Email Address</label>
+      <div class="input-wrapper">
+        <span class="input-icon">📧</span>
+        <input type="email" id="loginEmail" class="form-input" placeholder="you@example.com" />
+      </div>
+      <div class="field-error" id="loginEmailErr"></div>
+    </div>
+
+    <div class="form-group">
+      <label>Password</label>
+      <div class="input-wrapper">
+        <span class="input-icon">🔒</span>
+        <input type="password" id="loginPassword" class="form-input" placeholder="Enter your password" />
+        <button type="button" class="eye-btn" onclick="togglePwd('loginPassword', this)">👁</button>
+      </div>
+      <div class="field-error" id="loginPwdErr"></div>
+    </div>
+
+    <button class="btn-auth" id="loginBtn" onclick="doLogin()">Login to CarWale</button>
+
+    <div class="divider">or continue with</div>
+    <div class="social-btns">
+      <button class="btn-social" onclick="showAlert('Google login coming soon!','error')">🌐 Google</button>
+      <button class="btn-social" onclick="showAlert('Facebook login coming soon!','error')">📘 Facebook</button>
+    </div>
+
+    <div class="switch-link">
+      Don't have an account? <a href="#" onclick="switchTab('register')">Register now</a>
+    </div>
+  </div>
+
+  <!-- ── REGISTER FORM ── -->
+  <div id="registerForm" style="display:none;">
+    <h2 class="auth-title">Create account 🚗</h2>
+    <p class="auth-subtitle">Join millions of car buyers & sellers</p>
+
+    <div class="form-row-2">
+      <div class="form-group">
+        <label>Full Name *</label>
+        <div class="input-wrapper">
+          <span class="input-icon">👤</span>
+          <input type="text" id="regName" class="form-input" placeholder="Rahul Sharma" />
+        </div>
+        <div class="field-error" id="regNameErr"></div>
+      </div>
+      <div class="form-group">
+        <label>Phone Number</label>
+        <div class="input-wrapper">
+          <span class="input-icon">📱</span>
+          <input type="tel" id="regPhone" class="form-input" placeholder="9876543210" maxlength="10" />
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Email Address *</label>
+      <div class="input-wrapper">
+        <span class="input-icon">📧</span>
+        <input type="email" id="regEmail" class="form-input" placeholder="you@example.com" />
+      </div>
+      <div class="field-error" id="regEmailErr"></div>
+    </div>
+
+    <div class="form-group">
+      <label>City</label>
+      <div class="input-wrapper">
+        <span class="input-icon">📍</span>
+        <select id="regCity" class="form-input" style="padding-left:2.5rem">
+          <option value="">Select your city</option>
+          <option>Mumbai</option><option>Delhi</option><option>Bangalore</option>
+          <option>Pune</option><option>Hyderabad</option><option>Chennai</option>
+          <option>Kolkata</option><option>Ahmedabad</option><option>Jaipur</option>
+          <option>Gurgaon</option><option>Lucknow</option><option>Chandigarh</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Password *</label>
+      <div class="input-wrapper">
+        <span class="input-icon">🔒</span>
+        <input type="password" id="regPassword" class="form-input" placeholder="Min 6 characters" oninput="checkStrength(this.value)" />
+        <button type="button" class="eye-btn" onclick="togglePwd('regPassword', this)">👁</button>
+      </div>
+      <div class="pwd-strength" id="strengthBox" style="display:none">
+        <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+        <div class="strength-label" id="strengthLabel"></div>
+      </div>
+      <div class="field-error" id="regPwdErr"></div>
+    </div>
+
+    <div class="form-group">
+      <label>Confirm Password *</label>
+      <div class="input-wrapper">
+        <span class="input-icon">🔒</span>
+        <input type="password" id="regConfirm" class="form-input" placeholder="Re-enter password" />
+        <button type="button" class="eye-btn" onclick="togglePwd('regConfirm', this)">👁</button>
+      </div>
+      <div class="field-error" id="regConfirmErr"></div>
+    </div>
+
+    <div class="form-group" style="display:flex;align-items:flex-start;gap:.6rem;margin-top:.5rem">
+      <input type="checkbox" id="agreeTerms" style="margin-top:3px;accent-color:var(--red);width:16px;height:16px" />
+      <label for="agreeTerms" style="font-size:.83rem;color:var(--gray-600);cursor:pointer;font-weight:400">
+        I agree to the <a href="#" style="color:var(--red);font-weight:700">Terms & Conditions</a> and
+        <a href="#" style="color:var(--red);font-weight:700">Privacy Policy</a>
+      </label>
+    </div>
+    <div class="field-error" id="regTermsErr"></div>
+
+    <button class="btn-auth" id="registerBtn" onclick="doRegister()">Create My Account</button>
+
+    <div class="switch-link">
+      Already have an account? <a href="#" onclick="switchTab('login')">Login here</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── TAB SWITCHING ─────────────────────────────────────
+function switchTab(tab) {
+  const isLogin = tab === 'login';
+  document.getElementById('loginForm').style.display    = isLogin ? 'block' : 'none';
+  document.getElementById('registerForm').style.display = isLogin ? 'none'  : 'block';
+  document.getElementById('loginTab').classList.toggle('active', isLogin);
+  document.getElementById('registerTab').classList.toggle('active', !isLogin);
+  clearAlert();
+}
+
+// ── TOGGLE PASSWORD VISIBILITY ────────────────────────
+function togglePwd(fieldId, btn) {
+  const input = document.getElementById(fieldId);
+  input.type = input.type === 'password' ? 'text' : 'password';
+  btn.textContent = input.type === 'password' ? '👁' : '🙈';
+}
+
+// ── PASSWORD STRENGTH ─────────────────────────────────
+function checkStrength(pwd) {
+  const box = document.getElementById('strengthBox');
+  const fill = document.getElementById('strengthFill');
+  const label = document.getElementById('strengthLabel');
+  box.style.display = pwd.length ? 'block' : 'none';
+  let score = 0;
+  if (pwd.length >= 6)  score++;
+  if (pwd.length >= 10) score++;
+  if (/[A-Z]/.test(pwd)) score++;
+  if (/[0-9]/.test(pwd)) score++;
+  if (/[^A-Za-z0-9]/.test(pwd)) score++;
+  const levels = [
+    { pct: '20%', color: '#ef4444', text: '🔴 Weak' },
+    { pct: '40%', color: '#f97316', text: '🟠 Fair' },
+    { pct: '60%', color: '#eab308', text: '🟡 Good' },
+    { pct: '80%', color: '#22c55e', text: '🟢 Strong' },
+    { pct: '100%', color: '#16a34a', text: '✅ Very Strong' },
+  ];
+  const lvl = levels[Math.min(score, 4)];
+  fill.style.width = lvl.pct;
+  fill.style.background = lvl.color;
+  label.textContent = lvl.text;
+  label.style.color = lvl.color;
+}
+
+// ── ALERTS ────────────────────────────────────────────
+function showAlert(msg, type) {
+  const box = document.getElementById('alertBox');
+  document.getElementById('alertMsg').textContent = msg;
+  document.getElementById('alertIcon').textContent = type === 'success' ? '✅' : '❌';
+  box.className = `alert show ${type}`;
+  if (type === 'success') setTimeout(clearAlert, 5000);
+}
+function clearAlert() {
+  document.getElementById('alertBox').className = 'alert';
+}
+function setLoading(btnId, loading) {
+  const btn = document.getElementById(btnId);
+  btn.disabled = loading;
+  btn.innerHTML = loading
+    ? '<span class="spinner"></span> Please wait...'
+    : btnId === 'loginBtn' ? 'Login to CarWale' : 'Create My Account';
+}
+function clearErrors() {
+  document.querySelectorAll('.field-error').forEach(el => el.textContent = '');
+  document.querySelectorAll('.form-input').forEach(el => el.classList.remove('error'));
+}
+
+// ── LOGIN ─────────────────────────────────────────────
+async function doLogin() {
+  clearErrors(); clearAlert();
+  const email    = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  let valid = true;
+
+  if (!email) {
+    document.getElementById('loginEmailErr').textContent = 'Email is required';
+    document.getElementById('loginEmail').classList.add('error');
+    valid = false;
+  }
+  if (!password) {
+    document.getElementById('loginPwdErr').textContent = 'Password is required';
+    document.getElementById('loginPassword').classList.add('error');
+    valid = false;
+  }
+  if (!valid) return;
+
+  setLoading('loginBtn', true);
+  try {
+    const res  = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      // Save token + user to localStorage
+      localStorage.setItem('cw_token', data.token);
+      localStorage.setItem('cw_user',  JSON.stringify(data.user));
+      showAlert(data.message, 'success');
+      setTimeout(() => window.location.href = '/index.html', 1200);
+    } else {
+      showAlert(data.message, 'error');
+    }
+  } catch (err) {
+    showAlert('⚠️ Cannot connect to server. Is it running?', 'error');
+  }
+  setLoading('loginBtn', false);
+}
+
+// ── REGISTER ──────────────────────────────────────────
+async function doRegister() {
+  clearErrors(); clearAlert();
+  const name     = document.getElementById('regName').value.trim();
+  const email    = document.getElementById('regEmail').value.trim();
+  const phone    = document.getElementById('regPhone').value.trim();
+  const city     = document.getElementById('regCity').value;
+  const password = document.getElementById('regPassword').value;
+  const confirm  = document.getElementById('regConfirm').value;
+  const agreed   = document.getElementById('agreeTerms').checked;
+  let valid = true;
+
+  if (!name || name.length < 2) {
+    document.getElementById('regNameErr').textContent = 'Name must be at least 2 characters';
+    valid = false;
+  }
+  if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
+    document.getElementById('regEmailErr').textContent = 'Please enter a valid email';
+    valid = false;
+  }
+  if (!password || password.length < 6) {
+    document.getElementById('regPwdErr').textContent = 'Password must be at least 6 characters';
+    valid = false;
+  }
+  if (password !== confirm) {
+    document.getElementById('regConfirmErr').textContent = 'Passwords do not match';
+    valid = false;
+  }
+  if (!agreed) {
+    document.getElementById('regTermsErr').textContent = 'Please accept the terms & conditions';
+    valid = false;
+  }
+  if (!valid) return;
+
+  setLoading('registerBtn', true);
+  try {
+    const res  = await fetch('/api/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, password, phone, city })
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      localStorage.setItem('cw_token', data.token);
+      localStorage.setItem('cw_user',  JSON.stringify(data.user));
+      showAlert(data.message, 'success');
+      setTimeout(() => window.location.href = '/index.html', 1500);
+    } else {
+      showAlert(data.message, 'error');
+    }
+  } catch (err) {
+    showAlert('⚠️ Cannot connect to server. Is it running?', 'error');
+  }
+  setLoading('registerBtn', false);
+}
+
+// ── ENTER KEY ─────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    if (document.getElementById('loginForm').style.display !== 'none') doLogin();
+    else doRegister();
+  }
+});
+
+// ── CHECK IF ALREADY LOGGED IN ───────────────────────
+if (localStorage.getItem('cw_token')) {
+  window.location.href = '/index.html';
+}
+
+// ── CHECK URL HASH for ?tab=register ─────────────────
+if (window.location.search.includes('register') || window.location.hash === '#register') {
+  switchTab('register');
+}
+</script>
+</body>
+</html>

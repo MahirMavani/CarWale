@@ -1,0 +1,478 @@
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CarWale – New Cars, Used Cars, On Road Price, Buy Car, Sell Your Car</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header" id="header">
+  <div class="header-inner">
+    <a href="#" class="logo" onclick="showSection('home')">
+      <span class="logo-car">🚗</span>
+      <span class="logo-text">Car<span class="logo-accent">Wale</span></span>
+    </a>
+    <nav class="nav">
+      <a href="#" class="nav-link active" onclick="showSection('new-cars', this)">NEW CARS</a>
+      <a href="#" class="nav-link" onclick="showSection('used-cars', this)">USED CARS</a>
+      <a href="#" class="nav-link" onclick="showSection('news', this)">REVIEWS & NEWS</a>
+    </nav>
+    <div class="header-actions">
+      <button class="btn-sell" onclick="showSection('sell')">Sell Your Car</button>
+    </div>
+    <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#" onclick="showSection('new-cars'); toggleMobileMenu()">New Cars</a>
+    <a href="#" onclick="showSection('used-cars'); toggleMobileMenu()">Used Cars</a>
+    <a href="#" onclick="showSection('news'); toggleMobileMenu()">Reviews & News</a>
+    <a href="#" onclick="showSection('sell'); toggleMobileMenu()">Sell Your Car</a>
+  </div>
+</header>
+
+<!-- HOME SECTION -->
+<section id="section-home" class="section active">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-bg">
+      <div class="hero-blob hero-blob-1"></div>
+      <div class="hero-blob hero-blob-2"></div>
+      <div class="hero-blob hero-blob-3"></div>
+    </div>
+    <div class="hero-content">
+      <h1 class="hero-title">Find Your <span class="hero-accent">Right Car</span></h1>
+      <p class="hero-subtitle">Search from thousands of new & used cars across India</p>
+      <div class="search-box">
+        <div class="search-tabs">
+          <button class="stab active" onclick="setSearchTab(this,'new')">New Cars</button>
+          <button class="stab" onclick="setSearchTab(this,'used')">Used Cars</button>
+        </div>
+        <div class="search-row">
+          <div class="search-field">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            <input type="text" id="heroSearch" placeholder="Type model name, e.g. Alto, Swift..." />
+          </div>
+          <select id="heroCity" class="search-select">
+            <option value="">Select City</option>
+            <option>Mumbai</option><option>Delhi</option><option>Bangalore</option>
+            <option>Pune</option><option>Hyderabad</option><option>Chennai</option>
+            <option>Kolkata</option><option>Ahmedabad</option><option>Jaipur</option>
+          </select>
+          <button class="btn-search" onclick="doHeroSearch()">Search Cars</button>
+        </div>
+        <div class="quick-filters">
+          <span class="qf-label">Quick:</span>
+          <button class="qf-btn" onclick="quickFilter('SUV')">SUV</button>
+          <button class="qf-btn" onclick="quickFilter('Electric')">Electric</button>
+          <button class="qf-btn" onclick="quickFilter('Hatchback')">Hatchback</button>
+          <button class="qf-btn" onclick="quickFilter('Sedan')">Sedan</button>
+          <button class="qf-btn" onclick="quickFilter('','','Under 5L','500000')">Under ₹5L</button>
+          <button class="qf-btn" onclick="quickFilter('','','Under 10L','1000000')">Under ₹10L</button>
+        </div>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item"><span class="stat-num" id="statCars">50+</span><span class="stat-label">New Cars</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat-item"><span class="stat-num" id="statUsed">10+</span><span class="stat-label">Used Cars</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat-item"><span class="stat-num">30+</span><span class="stat-label">Brands</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat-item"><span class="stat-num">100+</span><span class="stat-label">Cities</span></div>
+    </div>
+  </div>
+
+  <!-- TRENDING CARS -->
+  <div class="section-block">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Trending Cars</h2>
+        <a href="#" class="view-all" onclick="showSection('new-cars')">View All →</a>
+      </div>
+      <div class="trending-scroll">
+        <div class="cars-row" id="trendingCars">
+          <div class="loading-row">Loading trending cars...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- POPULAR BY BUDGET -->
+  <div class="section-block bg-light">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Popular Cars by Budget</h2>
+      </div>
+      <div class="budget-tabs">
+        <button class="btab active" onclick="setBudgetTab(this,'under10')">Under ₹10 Lakh</button>
+        <button class="btab" onclick="setBudgetTab(this,'10to20')">₹10 – ₹20 Lakh</button>
+        <button class="btab" onclick="setBudgetTab(this,'20to30')">₹20 – ₹30 Lakh</button>
+        <button class="btab" onclick="setBudgetTab(this,'luxury')">Luxury</button>
+      </div>
+      <div class="body-tabs">
+        <button class="body-tab active" onclick="setBodyTab(this,'SUV')">SUV</button>
+        <button class="body-tab" onclick="setBodyTab(this,'Hatchback')">Hatchback</button>
+        <button class="body-tab" onclick="setBodyTab(this,'Sedan')">Sedan</button>
+        <button class="body-tab" onclick="setBodyTab(this,'MPV')">MPV</button>
+      </div>
+      <div class="cars-grid" id="budgetCars">
+        <div class="loading-row">Loading cars...</div>
+      </div>
+      <div style="text-align:center;margin-top:1.5rem">
+        <button class="btn-outline" onclick="showSection('new-cars')">View All Cars</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ALL BRANDS -->
+  <div class="section-block">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">All Brands</h2>
+        <a href="#" class="view-all" onclick="showSection('new-cars')">View More →</a>
+      </div>
+      <div class="brands-grid" id="brandsGrid">
+        <div class="loading-row">Loading brands...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- UPCOMING CARS -->
+  <div class="section-block bg-light">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Upcoming & Recently Launched Cars</h2>
+        <a href="#" class="view-all" onclick="showSection('new-cars')">View All →</a>
+      </div>
+      <div class="launch-tabs">
+        <button class="ltab active" onclick="setLaunchTab(this,'upcoming')">Upcoming Cars</button>
+        <button class="ltab" onclick="setLaunchTab(this,'new')">Just Launched</button>
+      </div>
+      <div class="cars-grid" id="upcomingCars">
+        <div class="loading-row">Loading...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FUEL TYPE CARS -->
+  <div class="section-block">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Cars by Fuel Type</h2>
+      </div>
+      <div class="fuel-tabs">
+        <button class="ftab active" onclick="setFuelTab(this,'Electric')">⚡ Electric</button>
+        <button class="ftab" onclick="setFuelTab(this,'Hybrid')">🌿 Hybrid</button>
+        <button class="ftab" onclick="setFuelTab(this,'CNG')">🔵 CNG</button>
+        <button class="ftab" onclick="setFuelTab(this,'Diesel')">⛽ Diesel</button>
+      </div>
+      <div class="cars-grid" id="fuelCars">
+        <div class="loading-row">Loading...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- USED CARS BY CITY -->
+  <div class="section-block bg-light">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Used Cars by City</h2>
+      </div>
+      <div class="cities-grid" id="citiesGrid">
+        <div class="loading-row">Loading...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEWS SECTION -->
+  <div class="section-block">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Latest Car Updates</h2>
+        <a href="#" class="view-all" onclick="showSection('news')">All News →</a>
+      </div>
+      <div class="news-tabs">
+        <button class="ntab active" onclick="setNewsTab(this,'News')">Car News</button>
+        <button class="ntab" onclick="setNewsTab(this,'Review')">Expert Reviews</button>
+      </div>
+      <div class="news-grid" id="newsGrid">
+        <div class="loading-row">Loading news...</div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- NEW CARS SECTION -->
+<section id="section-new-cars" class="section">
+  <div class="page-hero mini-hero">
+    <div class="container">
+      <h1>New Cars in India</h1>
+      <p>Explore latest car models, prices, and specifications</p>
+    </div>
+  </div>
+  <div class="container" style="padding-top:2rem;padding-bottom:3rem">
+    <div class="filter-bar">
+      <input type="text" class="filter-input" id="carsSearch" placeholder="🔍 Search brand or model..." oninput="filterCars()" />
+      <select class="filter-select" id="carsBodyType" onchange="filterCars()">
+        <option value="">All Body Types</option>
+        <option>SUV</option><option>Hatchback</option><option>Sedan</option>
+        <option>MPV</option><option>Coupe</option>
+      </select>
+      <select class="filter-select" id="carsFuelType" onchange="filterCars()">
+        <option value="">All Fuel Types</option>
+        <option>Petrol</option><option>Diesel</option>
+        <option>Electric</option><option>Hybrid</option><option>CNG</option>
+      </select>
+      <select class="filter-select" id="carsBudget" onchange="filterCars()">
+        <option value="">Any Budget</option>
+        <option value="500000">Under ₹5 Lakh</option>
+        <option value="1000000">Under ₹10 Lakh</option>
+        <option value="1500000">Under ₹15 Lakh</option>
+        <option value="2000000">Under ₹20 Lakh</option>
+        <option value="3000000">Under ₹30 Lakh</option>
+      </select>
+      <select class="filter-select" id="carsBrand" onchange="filterCars()">
+        <option value="">All Brands</option>
+      </select>
+    </div>
+    <div class="results-info" id="carsResultsInfo"></div>
+    <div class="cars-grid full-grid" id="allCarsGrid">
+      <div class="loading-row">Loading cars...</div>
+    </div>
+    <div class="pagination" id="carsPagination"></div>
+  </div>
+</section>
+
+<!-- USED CARS SECTION -->
+<section id="section-used-cars" class="section">
+  <div class="page-hero mini-hero used-hero">
+    <div class="container">
+      <h1>Used Cars in India</h1>
+      <p>Buy certified pre-owned cars at best prices</p>
+      <div class="used-sell-bar">
+        <button class="btn-sell-big" onclick="showSection('sell')">Sell Your Car</button>
+        <button class="btn-val" onclick="alert('Car Valuation Tool — Connect your MongoDB for real data!')">💰 Check Car Valuation</button>
+      </div>
+    </div>
+  </div>
+  <div class="container" style="padding-top:2rem;padding-bottom:3rem">
+    <div class="filter-bar">
+      <input type="text" class="filter-input" id="usedSearch" placeholder="🔍 Search brand or model..." oninput="filterUsedCars()" />
+      <select class="filter-select" id="usedCity" onchange="filterUsedCars()">
+        <option value="">All Cities</option>
+        <option>Delhi</option><option>Mumbai</option><option>Bangalore</option>
+        <option>Pune</option><option>Hyderabad</option><option>Chennai</option>
+        <option>Kolkata</option><option>Gurgaon</option><option>Ahmedabad</option>
+      </select>
+      <select class="filter-select" id="usedFuel" onchange="filterUsedCars()">
+        <option value="">All Fuel Types</option>
+        <option>Petrol</option><option>Diesel</option><option>Electric</option><option>CNG</option>
+      </select>
+      <select class="filter-select" id="usedBudget" onchange="filterUsedCars()">
+        <option value="">Any Budget</option>
+        <option value="500000">Under ₹5 Lakh</option>
+        <option value="1000000">Under ₹10 Lakh</option>
+        <option value="2000000">Under ₹20 Lakh</option>
+      </select>
+    </div>
+    <div class="results-info" id="usedResultsInfo"></div>
+    <div class="cars-grid full-grid" id="usedCarsGrid">
+      <div class="loading-row">Loading used cars...</div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWS SECTION -->
+<section id="section-news" class="section">
+  <div class="page-hero mini-hero news-hero-bg">
+    <div class="container">
+      <h1>Reviews & News</h1>
+      <p>Latest car news, expert reviews and videos from India's top automotive experts</p>
+    </div>
+  </div>
+  <div class="container" style="padding-top:2rem;padding-bottom:3rem">
+    <div class="news-filter-bar">
+      <button class="news-cat-btn active" onclick="filterNews('', this)">All</button>
+      <button class="news-cat-btn" onclick="filterNews('News', this)">News</button>
+      <button class="news-cat-btn" onclick="filterNews('Review', this)">Reviews</button>
+      <button class="news-cat-btn" onclick="filterNews('Video', this)">Videos</button>
+      <button class="news-cat-btn" onclick="filterNews('Launch', this)">Launches</button>
+    </div>
+    <div class="news-full-grid" id="newsFullGrid">
+      <div class="loading-row">Loading news...</div>
+    </div>
+  </div>
+</section>
+
+<!-- SELL SECTION -->
+<section id="section-sell" class="section">
+  <div class="page-hero mini-hero sell-hero-bg">
+    <div class="container">
+      <h1>Sell Your Car</h1>
+      <p>Get the best price for your car – quick, easy, and hassle-free</p>
+    </div>
+  </div>
+  <div class="container" style="padding-top:2rem;padding-bottom:3rem;max-width:700px">
+    <div class="sell-form-card">
+      <h2>List Your Car for Sale</h2>
+      <p class="sell-subtitle">Fill in the details below to list your used car</p>
+      <form class="sell-form" onsubmit="submitUsedCar(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Brand *</label>
+            <select id="sellBrand" required>
+              <option value="">Select Brand</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Model *</label>
+            <input type="text" id="sellModel" placeholder="e.g. Swift, Nexon" required />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Year *</label>
+            <select id="sellYear" required>
+              <option value="">Select Year</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>KM Driven *</label>
+            <input type="number" id="sellKm" placeholder="e.g. 45000" required />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Fuel Type *</label>
+            <select id="sellFuel" required>
+              <option value="">Select</option>
+              <option>Petrol</option><option>Diesel</option>
+              <option>Electric</option><option>Hybrid</option><option>CNG</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Transmission *</label>
+            <select id="sellTransmission" required>
+              <option value="">Select</option>
+              <option>Manual</option><option>Automatic</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>City *</label>
+            <select id="sellCity" required>
+              <option value="">Select City</option>
+              <option>Delhi</option><option>Mumbai</option><option>Bangalore</option>
+              <option>Pune</option><option>Hyderabad</option><option>Chennai</option>
+              <option>Kolkata</option><option>Ahmedabad</option><option>Jaipur</option>
+              <option>Gurgaon</option><option>Chandigarh</option><option>Lucknow</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Expected Price (₹) *</label>
+            <input type="number" id="sellPrice" placeholder="e.g. 650000" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Owner Type *</label>
+          <select id="sellOwner" required>
+            <option value="">Select</option>
+            <option>1st Owner</option><option>2nd Owner</option>
+            <option>3rd Owner</option><option>4th+ Owner</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="sellDesc" rows="3" placeholder="Describe your car's condition, features, etc."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Upload Car Images *</label>
+        <div class="file-upload">
+          <input type="file" id="image" accept="image/*" hidden>
+        <div class="file-box" onclick="document.getElementById('image').click()">
+          <span id="fileText">Choose Car Image</span>
+        </div>
+  </div>
+</div>
+        <button type="submit" class="btn-submit">List My Car for Sale</button>
+      </form>
+      <div id="sellSuccess" class="sell-success" style="display:none"></div>
+    </div>
+  </div>
+</section>
+
+<!-- CAR DETAIL MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-content" id="modalContent"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">🚗 Car<span>Wale</span></div>
+        <p>India's leading auto portal helping you find, buy, and sell cars with ease.</p>
+        <div class="footer-social">
+          <a href="#" class="social-btn">📘</a>
+          <a href="#" class="social-btn">🐦</a>
+          <a href="#" class="social-btn">📸</a>
+          <a href="#" class="social-btn">▶️</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>New Cars</h4>
+        <a href="#" onclick="quickFilter('SUV')">SUV Cars</a>
+        <a href="#" onclick="quickFilter('Hatchback')">Hatchback Cars</a>
+        <a href="#" onclick="quickFilter('Sedan')">Sedan Cars</a>
+        <a href="#" onclick="quickFilter('Electric','Electric')">Electric Cars</a>
+        <a href="#" onclick="quickFilter('','Hybrid')">Hybrid Cars</a>
+      </div>
+      <div class="footer-col">
+        <h4>Used Cars</h4>
+        <a href="#" onclick="showSection('used-cars')">Used Cars in Delhi</a>
+        <a href="#" onclick="showSection('used-cars')">Used Cars in Mumbai</a>
+        <a href="#" onclick="showSection('used-cars')">Used Cars in Bangalore</a>
+        <a href="#" onclick="showSection('used-cars')">Used Cars in Pune</a>
+        <a href="#" onclick="showSection('sell')">Sell Your Car</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="#">About Us</a>
+        <a href="#">Careers</a>
+        <a href="#">Advertise</a>
+        <a href="#">Terms & Conditions</a>
+        <a href="#">Privacy Policy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 CarWale (Replica). Built with Node.js + Express + MongoDB.</span>
+      <div class="footer-apps">
+        <a href="#" class="app-badge"> Android App</a>
+        <a href="#" class="app-badge"> iOS App</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+
+<script src="js/app.js"></script>
+</body>
+</html>
